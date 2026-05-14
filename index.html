@@ -462,6 +462,118 @@
 
   .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── FORMULÁRIO WIZARD ─── */
+  .form-section {
+    background: #021f19;
+    padding: 5.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .form-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(67,224,198,0.4), transparent);
+  }
+  .form-section::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(67,224,198,0.15), transparent);
+  }
+  .form-inner { max-width: 620px; margin: 0 auto; text-align: center; }
+  .form-escola-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(67,224,198,0.1);
+    border: 1px solid rgba(67,224,198,0.25);
+    border-radius: 100px; padding: 0.45rem 1.2rem;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--verde-neon); margin-bottom: 2.5rem;
+  }
+  .form-escola-tag::before { content: '●'; font-size: 0.45rem; opacity: 0.7; }
+  .form-progress {
+    display: flex; justify-content: center; align-items: center; gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .form-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background .3s, width .3s, border-radius .3s;
+  }
+  .form-dot.ativo { background: var(--verde-neon); width: 22px; border-radius: 3px; }
+  .form-dot.feito { background: rgba(67,224,198,0.35); }
+  .form-pergunta {
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    font-weight: 700; color: #fff;
+    letter-spacing: -0.02em; line-height: 1.25;
+    margin-bottom: 1.75rem; min-height: 2.5em;
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 1.05rem 1.4rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.05rem; font-weight: 400; color: #fff;
+    outline: none; transition: border-color .2s, background .2s;
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.22); }
+  .form-input:focus { border-color: var(--verde-neon); background: rgba(255,255,255,0.08); }
+  .form-pills {
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    justify-content: center; margin-bottom: 0.5rem;
+  }
+  .form-pill {
+    padding: 0.7rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 100px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.04);
+    cursor: pointer; transition: all .2s;
+  }
+  .form-pill:hover { border-color: var(--verde-neon); color: var(--verde-neon); background: rgba(67,224,198,0.06); }
+  .form-pill.selecionado {
+    background: rgba(67,224,198,0.14);
+    border-color: var(--verde-neon); color: var(--verde-neon);
+  }
+  .form-actions {
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
+    margin-top: 1.75rem;
+  }
+  .form-btn-avancar {
+    background: var(--verde-neon); color: var(--verde-escuro);
+    border: none; border-radius: 6px;
+    padding: 0.9rem 2.2rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+  }
+  .form-btn-avancar:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(67,224,198,0.3); }
+  .form-btn-avancar:disabled { opacity: 0.35; cursor: default; transform: none; box-shadow: none; }
+  .form-btn-voltar {
+    background: none; border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.82rem; color: rgba(255,255,255,0.3);
+    cursor: pointer; padding: 0.5rem; transition: color .2s;
+  }
+  .form-btn-voltar:hover { color: rgba(255,255,255,0.65); }
+  .form-hint { font-size: 0.72rem; color: rgba(255,255,255,0.22); margin-top: 0.75rem; }
+  .form-sucesso { text-align: center; padding: 1.5rem 0; }
+  .form-sucesso-check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(67,224,198,0.12);
+    border: 1px solid rgba(67,224,198,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.4rem; color: var(--verde-neon);
+  }
+  .form-sucesso h3 { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }
+  .form-sucesso p { font-size: 0.92rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
+  @media (max-width: 900px) {
+    .form-section { padding: 4rem 1.5rem; }
+    .form-pergunta { min-height: auto; }
+  }
 </style>
 </head>
 <body>
@@ -476,6 +588,13 @@
     <line x1="20" y1="200" x2="180" y2="200" stroke="#43E0C6" stroke-width="8" stroke-linecap="round"/>
     <path d="M60 10 L100 20 L140 10" stroke="#43E0C6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </svg>
+</section>
+
+<section class="form-section" id="formulario">
+  <div class="form-inner">
+    <div class="form-escola-tag">Sou Escola</div>
+    <div id="form-wizard"></div>
+  </div>
 </section>
 
 <div class="logos-bar" id="logos-placeholder"></div>
@@ -520,8 +639,14 @@ const CONFIG = {
     slogan: "Especialistas em tráfego pago para escolas",
     local: "São Paulo, Brasil",
     ano: "2025",
-    cta_link: "#cta",           // Link do botão "Diagnóstico Gratuito" no menu
+    cta_link: "#formulario",     // Link do botão "Agendar Reunião" no menu
     whatsapp_link: "#",         // Cole aqui o link do WhatsApp ou formulário
+  },
+
+  // ── Formulário de captação ───────────────────────────────────
+  formulario: {
+    webhook: "https://hook.us2.make.com/h8rfq7xc5kcq8g6lpwt6pvqw2j8hcu1n",
+    categorias: ["Infantil", "Fund. I", "Fund. II", "Ensino Médio"],
   },
 
   // ── Menu de navegação ────────────────────────────────────────
@@ -755,9 +880,9 @@ const CONFIG = {
   cta: {
     titulo:   "Sua escola merece uma agência<br>que não some após fechar o contrato.",
     subtitulo: "Com IA monitorando 24h e acompanhamento diário no seu celular, você sempre sabe o que está acontecendo — e o que vem a seguir.",
-    btn:      "Quero meu diagnóstico gratuito",
+    btn:      "Agendar minha reunião gratuita",
     micro:    "Sem compromisso. Em 30 minutos você sai com um raio-x das suas campanhas.",
-    link:     "#",
+    link:     "#formulario",
   },
 
 };
@@ -777,7 +902,7 @@ document.getElementById('nav-placeholder').innerHTML = `
   <ul>
     ${CONFIG.nav.map(item => `<li><a href="${item.href}">${item.texto}</a></li>`).join('')}
   </ul>
-  <a href="${CONFIG.empresa.cta_link}" class="nav-cta">Diagnóstico Gratuito</a>
+  <a href="${CONFIG.empresa.cta_link}" class="nav-cta">Agendar Reunião</a>
 `;
 
 // ── HERO ─────────────────────────────────────────────────────
@@ -976,6 +1101,125 @@ document.getElementById('footer-placeholder').innerHTML = `
   <p>${CONFIG.empresa.slogan} · ${CONFIG.empresa.local}</p>
   <p style="font-size:0.7rem;color:rgba(255,255,255,0.2)">© ${CONFIG.empresa.ano} ${CONFIG.empresa.nome}</p>
 `;
+
+// ── FORMULÁRIO WIZARD ────────────────────────────────────────
+(function () {
+  const passos = [
+    { campo: 'nome',   tipo: 'text',        pergunta: 'Qual é o seu nome?',           placeholder: 'Maria Silva',       dica: 'Responsável pelo contato' },
+    { campo: 'escola', tipo: 'text',        pergunta: 'Nome da escola?',              placeholder: 'Colégio São Paulo', dica: '' },
+    { campo: 'cat',    tipo: 'multiselect', pergunta: 'Categoria da escola?',         opcoes: CONFIG.formulario.categorias, dica: 'Pode selecionar mais de uma' },
+    { campo: 'cidade', tipo: 'text',        pergunta: 'Em qual cidade?',              placeholder: 'São Paulo',         dica: '' },
+    { campo: 'turmas', tipo: 'number',      pergunta: 'Quantas turmas a escola tem?', placeholder: '12',                dica: 'Número aproximado está ótimo' },
+    { campo: 'zap',    tipo: 'tel',         pergunta: 'Qual é o seu WhatsApp?',       placeholder: '(11) 9 9999-8888',  dica: 'Entraremos em contato por aqui' },
+  ];
+
+  let atual = 0;
+  const dados = {};
+  const wizard = document.getElementById('form-wizard');
+
+  function dots() {
+    return passos.map((_, i) =>
+      `<div class="form-dot ${i === atual ? 'ativo' : i < atual ? 'feito' : ''}"></div>`
+    ).join('');
+  }
+
+  function render() {
+    const p = passos[atual];
+    let corpo = '';
+
+    if (p.tipo === 'multiselect') {
+      corpo = `<div class="form-pills" id="form-pills">
+        ${p.opcoes.map(o => `
+          <button type="button" class="form-pill ${(dados[p.campo] || []).includes(o) ? 'selecionado' : ''}" data-val="${o}">${o}</button>
+        `).join('')}
+      </div>`;
+    } else {
+      corpo = `<input class="form-input" id="form-campo" type="${p.tipo}" placeholder="${p.placeholder}" value="${dados[p.campo] || ''}" autocomplete="off">`;
+    }
+
+    wizard.innerHTML = `
+      <div class="form-progress">${dots()}</div>
+      <div class="form-pergunta">${p.pergunta}</div>
+      ${corpo}
+      ${p.dica ? `<p class="form-hint">${p.dica}</p>` : ''}
+      <div class="form-actions">
+        ${atual > 0 ? `<button type="button" class="form-btn-voltar" id="form-voltar">← Voltar</button>` : ''}
+        <button type="button" class="form-btn-avancar" id="form-avancar">
+          ${atual === passos.length - 1 ? 'Enviar' : 'Continuar →'}
+        </button>
+      </div>
+    `;
+
+    const btnAv = document.getElementById('form-avancar');
+    const btnVo = document.getElementById('form-voltar');
+
+    if (p.tipo === 'multiselect') {
+      document.querySelectorAll('.form-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          const val = pill.dataset.val;
+          if (!dados[p.campo]) dados[p.campo] = [];
+          if (dados[p.campo].includes(val)) {
+            dados[p.campo] = dados[p.campo].filter(v => v !== val);
+            pill.classList.remove('selecionado');
+          } else {
+            dados[p.campo].push(val);
+            pill.classList.add('selecionado');
+          }
+        });
+      });
+    } else {
+      const campo = document.getElementById('form-campo');
+      campo.focus();
+      campo.addEventListener('input', () => { dados[p.campo] = campo.value; });
+      campo.addEventListener('keydown', e => { if (e.key === 'Enter') btnAv.click(); });
+    }
+
+    btnAv.addEventListener('click', () => {
+      const val = dados[p.campo];
+      const vazio = p.tipo === 'multiselect' ? (!val || val.length === 0) : (!val || !String(val).trim());
+      if (vazio) return;
+      if (atual < passos.length - 1) { atual++; render(); } else { enviar(); }
+    });
+
+    if (btnVo) btnVo.addEventListener('click', () => { atual--; render(); });
+  }
+
+  async function enviar() {
+    wizard.innerHTML = `<p style="text-align:center;color:rgba(255,255,255,0.4);font-size:0.9rem;padding:2rem 0">Enviando...</p>`;
+
+    const payload = {
+      nome:      dados.nome,
+      escola:    dados.escola,
+      categoria: (dados.cat || []).join(', '),
+      cidade:    dados.cidade,
+      turmas:    dados.turmas,
+      whatsapp:  dados.zap,
+      origem:    'Site Minerva',
+      data:      new Date().toLocaleString('pt-BR'),
+    };
+
+    try {
+      if (CONFIG.formulario.webhook) {
+        await fetch(CONFIG.formulario.webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      }
+    } catch (_) {}
+
+    const primeiro = dados.nome ? dados.nome.split(' ')[0] : '';
+    wizard.innerHTML = `
+      <div class="form-sucesso">
+        <div class="form-sucesso-check">✓</div>
+        <h3>Recebido, ${primeiro}.</h3>
+        <p>Entraremos em contato pelo WhatsApp em breve.<br>Geralmente respondemos no mesmo dia.</p>
+      </div>
+    `;
+  }
+
+  render();
+})();
 
 // ── Animação de entrada ──────────────────────────────────────
 const obs = new IntersectionObserver((entries) => {
