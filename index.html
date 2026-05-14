@@ -466,7 +466,7 @@
   /* ─── FORMULÁRIO WIZARD ─── */
   .form-section {
     background: #021f19;
-    padding: 5.5rem 4rem;
+    padding: 3.5rem 4rem;
     position: relative; overflow: hidden;
   }
   .form-section::before {
@@ -590,16 +590,16 @@
   </svg>
 </section>
 
+<div class="logos-bar" id="logos-placeholder"></div>
+
+<section class="proposta fade-in" id="proposta-placeholder"></section>
+
 <section class="form-section" id="formulario">
   <div class="form-inner">
     <div class="form-escola-tag">Sou Escola</div>
     <div id="form-wizard"></div>
   </div>
 </section>
-
-<div class="logos-bar" id="logos-placeholder"></div>
-
-<section class="proposta fade-in" id="proposta-placeholder"></section>
 
 <section class="ia-section" id="ia">
   <div class="ia-inner fade-in" id="ia-placeholder"></div>
@@ -661,8 +661,8 @@ const CONFIG = {
   hero: {
     tag: "Especialistas em campanhas de matrículas",
     titulo: "Tráfego pago para escolas.<br>Com <em>IA</em> monitorando<br>cada detalhe.",
-    subtitulo: "Não somos uma agência generalista. Somos especialistas em campanhas de matrículas — e toda a nossa operação roda com inteligência artificial identificando padrões, oportunidades e anomalias antes que virem problema.",
-    btn_primario:   { texto: "Quero um diagnóstico gratuito", href: "#cta" },
+    subtitulo: "Não somos uma agência generalista. Somos especialistas em campanhas de matrículas — e toda a nossa operação roda com inteligência artificial identificando padrões, oportunidades e anomalias antes que virem problema. Além disso, sua Gerente de Contas é formada em pedagogia, com mais de 5 anos em sala de aula na educação infantil e Fund. I.",
+    btn_primario:   { texto: "Quero uma reunião", href: "#cta" },
     btn_secundario: { texto: "Ver cases de escolas",          href: "#case" },
 
     // Números de destaque abaixo dos botões
@@ -674,7 +674,7 @@ const CONFIG = {
 
     // Mockup do celular (exemplo de mensagem diária)
     phone: {
-      escola: "Colégio São Lucas",
+      escola: "Escola Mais",
       hora:   "07h14",
       mensagem: "Bom dia! Ontem entraram <strong>18 leads</strong>. CPL médio de <strong>R$16</strong>. Instagram acima da média. Nenhuma ação necessária hoje — campanha estável. 👍",
       stats: [
@@ -689,12 +689,12 @@ const CONFIG = {
   // ── Clientes atendidos (barra de logos) ─────────────────────
   // Adicione, remova ou renomeie as escolas à vontade.
   clientes: [
-    "Colégio São Lucas",
-    "Instituto Alfa",
-    "Escola Nova Era",
-    "Grupo Educacional Vértice",
-    "Colégio Horizon",
-    "Centro Educacional Ápex",
+    "Colégio Einstein Ribeirão",
+    "Escola Mais",
+    "Colégio Lourenço Castanho",
+    "Escola Concept - SP & SSA",
+    "Faculdade do Comércio",
+    "Escola Carolina Patrício",
   ],
 
   // ── Seção "Por que Minerva" ──────────────────────────────────
@@ -890,6 +890,9 @@ const CONFIG = {
 // ═══════════════════════════════════════════════════════════════
 //  FIM DA ÁREA DE EDIÇÃO — não altere o código abaixo.
 // ═══════════════════════════════════════════════════════════════
+
+// Garante que a página sempre abre no topo
+if (window.location.hash) history.replaceState(null, '', window.location.pathname);
 
 // Título da aba
 document.title = `${CONFIG.empresa.nome} — ${CONFIG.empresa.slogan}`;
