@@ -1,0 +1,15 @@
+# ═══════════════════════════════════════════════
+#  MINERVA — .gitignore raiz
+#  Apenas 05_Site/ é exposto. Todo o resto é
+#  propriedade intelectual fora do controle de versão.
+# ═══════════════════════════════════════════════
+
+# Ignora tudo por padrão
+*
+
+# Libera apenas o site institucional
+!05_Site/
+!05_Site/**
+
+# Ignora este próprio arquivo (não precisa versionar)
+!.gitignore
