@@ -543,7 +543,7 @@ if (p.tipo === 'multiselect') {
           alert('Informe um WhatsApp válido: DDD + 9 números (móvel) ou DDD + 8 números (fixo)');
           return;
         }
-       dados[campo] = sanitize.text(val);
+       dados[campo] = val;
       }
 
       atual++;
