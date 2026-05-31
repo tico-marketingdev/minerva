@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minerva — Tráfego Pago para Escolas</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-escuro: #003D2F;
+    --verde-medio: #00806A;
+    --verde-neon: #43E0C6;
+    --branco: #ffffff;
+    --cinza-claro: #f4f4f2;
+    --cinza-texto: #5a6370;
+    --grad: linear-gradient(135deg, #003D2F 0%, #00806A 55%, #43E0C6 100%);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Sora', sans-serif;
+    background: #fff;
+    color: var(--verde-escuro);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,61,47,0.08);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-size: 1.35rem; font-weight: 700; color: var(--verde-escuro);
+    text-decoration: none; letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--verde-neon); }
+  .nav-logo-bar {
+    width: 28px; height: 2px; background: var(--verde-medio);
+    display: inline-block; margin-right: 6px; vertical-align: middle;
+  }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a { text-decoration: none; font-size: 0.85rem; font-weight: 500;
+    color: var(--verde-escuro); opacity: 0.75; transition: opacity .2s; }
+  nav ul a:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--verde-escuro); color: #fff;
+    padding: 0.65rem 1.5rem; border-radius: 4px;
+    font-size: 0.85rem; font-weight: 600; text-decoration: none;
+    transition: background .2s;
+  }
+  .nav-cta:hover { background: var(--verde-medio); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 5rem;
+    position: relative; overflow: hidden;
+    background: var(--verde-escuro);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -10%; right: -5%;
+    width: 55%; height: 120%;
+    background: linear-gradient(160deg, #00806A 0%, #43E0C6 100%);
+    clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0.18;
+  }
+  .hero-grafismo {
+    position: absolute; bottom: -60px; right: -40px;
+    width: 320px; opacity: 0.07;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(67,224,198,0.15);
+    border: 1px solid rgba(67,224,198,0.35);
+    color: var(--verde-neon);
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.4rem 1rem;
+    border-radius: 2px; margin-bottom: 2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 800; line-height: 1.08;
+    color: #fff; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--verde-neon); }
+  .hero-sub {
+    font-size: 1.05rem; font-weight: 300; line-height: 1.7;
+    color: rgba(255,255,255,0.65); max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--verde-neon); color: var(--verde-escuro);
+    padding: 1rem 2rem; border-radius: 4px;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(67,224,198,0.35); }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.8);
+    padding: 1rem 2rem; border-radius: 4px;
+    font-size: 0.9rem; font-weight: 500; text-decoration: none;
+    transition: border-color .2s, color .2s; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--verde-neon); color: var(--verde-neon); }
+  .hero-right { position: relative; z-index: 2; display: flex; align-items: center; justify-content: flex-end; }
+
+  /* Phone mockup */
+  .phone-wrap {
+    position: relative; width: 280px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .phone {
+    width: 100%; background: #0a1a16;
+    border-radius: 36px; padding: 1.5rem 1.2rem;
+    border: 6px solid #1a3a30;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(67,224,198,0.1);
+  }
+  .phone-notch {
+    width: 80px; height: 8px; background: #1a3a30;
+    border-radius: 4px; margin: 0 auto 1.2rem;
+  }
+  .phone-header {
+    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--verde-neon);
+    margin-bottom: 0.8rem; opacity: 0.7;
+  }
+  .phone-msg {
+    background: rgba(67,224,198,0.08);
+    border-left: 2px solid var(--verde-neon);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.7rem;
+  }
+  .phone-msg-label {
+    font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--verde-neon); margin-bottom: 0.4rem;
+  }
+  .phone-msg p {
+    font-size: 0.72rem; line-height: 1.5; color: rgba(255,255,255,0.85);
+    font-weight: 300;
+  }
+  .phone-msg p strong { color: var(--verde-neon); font-weight: 700; }
+  .phone-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.5rem; margin-top: 0.7rem;
+  }
+  .phone-stat {
+    background: rgba(0,128,106,0.15);
+    border-radius: 8px; padding: 0.6rem 0.7rem;
+    text-align: center;
+  }
+  .phone-stat-num {
+    font-size: 1.1rem; font-weight: 800; color: var(--verde-neon);
+    display: block;
+  }
+  .phone-stat-label {
+    font-size: 0.52rem; color: rgba(255,255,255,0.55);
+    font-weight: 400; letter-spacing: 0.04em;
+  }
+  .phone-divider {
+    height: 1px; background: rgba(255,255,255,0.05);
+    margin: 0.8rem 0;
+  }
+  .phone-chip {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    background: rgba(67,224,198,0.12); border-radius: 20px;
+    padding: 0.3rem 0.7rem; font-size: 0.6rem;
+    color: var(--verde-neon); font-weight: 600;
+  }
+  .phone-chip::before { content: '●'; font-size: 0.4rem; }
+
+  /* Hero metrics */
+  .hero-metrics {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-metric-num {
+    font-size: 1.8rem; font-weight: 800; color: var(--verde-neon);
+    display: block; line-height: 1;
+  }
+  .hero-metric-label {
+    font-size: 0.72rem; color: rgba(255,255,255,0.5);
+    margin-top: 0.3rem; font-weight: 300;
+  }
+
+  /* ─── LOGOS ─── */
+  .logos-bar {
+    background: var(--cinza-claro);
+    padding: 2.5rem 4rem;
+    display: flex; align-items: center; gap: 2rem;
+  }
+  .logos-label {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--cinza-texto);
+    white-space: nowrap;
+  }
+  .logos-track {
+    flex: 1; display: flex; gap: 3rem; align-items: center;
+    overflow: hidden; flex-wrap: wrap;
+  }
+  .logo-pill {
+    background: white; border-radius: 6px;
+    padding: 0.6rem 1.4rem; font-size: 0.8rem; font-weight: 700;
+    color: var(--verde-escuro); opacity: 0.55; white-space: nowrap;
+    border: 1px solid rgba(0,61,47,0.08);
+  }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 6rem 4rem; }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--verde-medio);
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+    color: var(--verde-escuro);
+  }
+  h2 em { font-style: normal; color: var(--verde-medio); }
+
+  /* ─── PROPOSTA DE VALOR ─── */
+  .proposta {
+    background: #fff;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .proposta-text p {
+    font-size: 1rem; line-height: 1.75; color: var(--cinza-texto);
+    margin-top: 1.5rem; font-weight: 300;
+  }
+  .proposta-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .proposta-card {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    padding: 1.5rem; border-radius: 8px;
+    border: 1px solid rgba(0,61,47,0.08);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .proposta-card:hover {
+    border-color: var(--verde-neon);
+    box-shadow: 0 4px 24px rgba(67,224,198,0.12);
+  }
+  .proposta-card-icon {
+    width: 44px; height: 44px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--verde-escuro), var(--verde-medio));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .proposta-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .proposta-card p { font-size: 0.82rem; color: var(--cinza-texto); line-height: 1.6; }
+
+  /* ─── IA ─── */
+  .ia-section { background: var(--verde-escuro); position: relative; overflow: hidden; }
+  .ia-section::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 40%; height: 100%;
+    background: linear-gradient(180deg, #00806A 0%, transparent 100%);
+    opacity: 0.15;
+  }
+  .ia-section .section-tag { color: var(--verde-neon); }
+  .ia-section h2 { color: #fff; }
+  .ia-section h2 em { color: var(--verde-neon); }
+  .ia-inner { position: relative; z-index: 2; }
+  .ia-subtitle {
+    font-size: 1rem; color: rgba(255,255,255,0.55); font-weight: 300;
+    max-width: 540px; margin-top: 1rem; margin-bottom: 3.5rem; line-height: 1.7;
+  }
+  .ia-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .ia-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(67,224,198,0.12);
+    border-radius: 10px; padding: 2rem;
+    transition: border-color .2s, background .2s;
+  }
+  .ia-card:hover {
+    border-color: rgba(67,224,198,0.4);
+    background: rgba(255,255,255,0.07);
+  }
+  .ia-card-num {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--verde-neon); opacity: 0.6;
+    margin-bottom: 1rem;
+  }
+  .ia-card h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem; }
+  .ia-card p { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.65; font-weight: 300; }
+  .ia-card ul { list-style: none; margin-top: 1rem; }
+  .ia-card ul li {
+    font-size: 0.78rem; color: rgba(255,255,255,0.45); line-height: 1.6;
+    padding-left: 1rem; position: relative;
+  }
+  .ia-card ul li::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--verde-neon); font-size: 0.65rem;
+  }
+
+  /* ─── ACOMPANHAMENTO ─── */
+  .acomp-section { background: var(--cinza-claro); }
+  .acomp-header { max-width: 600px; margin-bottom: 3.5rem; }
+  .acomp-header p { font-size: 1rem; color: var(--cinza-texto); margin-top: 1rem; line-height: 1.7; font-weight: 300; }
+  .acomp-timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .acomp-item {
+    background: #fff; border-radius: 10px; padding: 2rem;
+    border-top: 3px solid transparent;
+    transition: border-color .2s;
+    position: relative;
+  }
+  .acomp-item:nth-child(1) { border-top-color: var(--verde-neon); }
+  .acomp-item:nth-child(2) { border-top-color: var(--verde-medio); }
+  .acomp-item:nth-child(3) { border-top-color: var(--verde-escuro); }
+  .acomp-freq {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--verde-medio); margin-bottom: 1rem;
+  }
+  .acomp-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .acomp-item p { font-size: 0.83rem; color: var(--cinza-texto); line-height: 1.65; font-weight: 300; margin-bottom: 1rem; }
+  .acomp-bullets { list-style: none; }
+  .acomp-bullets li {
+    font-size: 0.78rem; color: var(--cinza-texto); line-height: 1.7;
+    padding-left: 1rem; position: relative;
+  }
+  .acomp-bullets li::before { content: '·'; position: absolute; left: 0; color: var(--verde-neon); font-size: 1.2rem; line-height: 1; }
+  .acomp-highlight {
+    margin-top: 3rem; background: var(--verde-escuro);
+    border-radius: 12px; padding: 2.5rem 3rem;
+    display: flex; align-items: center; gap: 3rem;
+  }
+  .acomp-highlight-icon { font-size: 3rem; flex-shrink: 0; }
+  .acomp-highlight h3 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+  .acomp-highlight p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; }
+  .msg-preview {
+    flex: 1; background: rgba(255,255,255,0.06); border-radius: 10px;
+    padding: 1.2rem 1.5rem; border-left: 3px solid var(--verde-neon);
+    font-size: 0.82rem; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300;
+    font-style: italic;
+  }
+  .msg-preview strong { color: var(--verde-neon); font-style: normal; font-weight: 700; }
+
+  /* ─── SERVIÇOS ─── */
+  .servicos { background: #fff; }
+  .servicos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .servico-card {
+    border: 1px solid rgba(0,61,47,0.1); border-radius: 10px; padding: 2rem;
+    transition: all .2s;
+  }
+  .servico-card:hover {
+    border-color: var(--verde-neon);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(67,224,198,0.1);
+  }
+  .servico-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .servico-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .servico-card p { font-size: 0.82rem; color: var(--cinza-texto); line-height: 1.65; font-weight: 300; }
+
+  /* ─── COMPARATIVO ─── */
+  .comparativo { background: var(--verde-escuro); }
+  .comparativo h2 { color: #fff; }
+  .comparativo h2 em { color: var(--verde-neon); }
+  .comp-table { margin-top: 3rem; border-radius: 10px; overflow: hidden; border: 1px solid rgba(67,224,198,0.1); }
+  .comp-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; }
+  .comp-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .comp-row.header { background: rgba(67,224,198,0.06); }
+  .comp-cell {
+    padding: 1rem 1.5rem; font-size: 0.83rem; color: rgba(255,255,255,0.6);
+    font-weight: 300; border-right: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center;
+  }
+  .comp-cell:last-child { border-right: none; }
+  .comp-row.header .comp-cell { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .comp-cell.destaque { color: var(--verde-neon); font-weight: 500; }
+  .comp-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .comp-criterio { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+  /* ─── CASE ─── */
+  .case-section { background: var(--cinza-claro); }
+  .case-inner {
+    background: var(--verde-escuro); border-radius: 16px;
+    padding: 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .case-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--verde-neon); margin-bottom: 0.75rem; }
+  .case-inner h3 { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 1rem; line-height: 1.2; }
+  .case-inner p { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.7; font-weight: 300; }
+  .case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .case-metric { text-align: center; }
+  .case-metric-num { font-size: 2.2rem; font-weight: 800; color: var(--verde-neon); display: block; line-height: 1; }
+  .case-metric-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-top: 0.4rem; line-height: 1.4; font-weight: 300; }
+  .case-metric-divider { height: 2px; background: rgba(67,224,198,0.15); margin: 1.5rem 0; }
+
+  /* ─── CTA FINAL ─── */
+  .cta-final {
+    background: var(--grad); text-align: center;
+    padding: 7rem 4rem; position: relative; overflow: hidden;
+  }
+  .cta-final::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cta-final h2 { color: #fff; font-size: clamp(2rem, 4vw, 3rem); position: relative; }
+  .cta-final p { color: rgba(255,255,255,0.7); max-width: 500px; margin: 1.2rem auto 2.5rem; font-weight: 300; font-size: 1rem; line-height: 1.7; position: relative; }
+  .cta-final .btn-white {
+    background: #fff; color: var(--verde-escuro);
+    padding: 1.1rem 2.5rem; border-radius: 4px;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    display: inline-block; position: relative;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .cta-final .btn-white:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+  .cta-micro { margin-top: 1.2rem; font-size: 0.75rem; color: rgba(255,255,255,0.5); position: relative; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--verde-escuro); padding: 2.5rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.7); }
+  .footer-logo span { color: var(--verde-neon); }
+  footer p { font-size: 0.75rem; color: rgba(255,255,255,0.3); font-weight: 300; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; gap: 3rem; }
+    .hero-right { justify-content: center; }
+    .phone-wrap { width: 240px; }
+    .logos-bar { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .proposta { grid-template-columns: 1fr; gap: 3rem; }
+    .ia-grid { grid-template-columns: 1fr; }
+    .acomp-timeline { grid-template-columns: 1fr; }
+    .acomp-highlight { flex-direction: column; gap: 1.5rem; }
+    .servicos-grid { grid-template-columns: 1fr; }
+    .comp-row { grid-template-columns: 1fr; }
+    .comp-cell { border-right: none; }
+    .comp-row.header { display: none; }
+    .case-inner { grid-template-columns: 1fr; padding: 2.5rem; gap: 2.5rem; }
+    .cta-final { padding: 5rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── FORMULÁRIO WIZARD ─── */
+  .form-section {
+    background: #021f19;
+    padding: 3.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .form-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(67,224,198,0.4), transparent);
+  }
+  .form-section::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(67,224,198,0.15), transparent);
+  }
+  .form-inner { max-width: 620px; margin: 0 auto; text-align: center; }
+  .form-escola-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(67,224,198,0.1);
+    border: 1px solid rgba(67,224,198,0.25);
+    border-radius: 100px; padding: 0.45rem 1.2rem;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--verde-neon); margin-bottom: 2.5rem;
+  }
+  .form-escola-tag::before { content: '●'; font-size: 0.45rem; opacity: 0.7; }
+  .form-progress {
+    display: flex; justify-content: center; align-items: center; gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .form-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background .3s, width .3s, border-radius .3s;
+  }
+  .form-dot.ativo { background: var(--verde-neon); width: 22px; border-radius: 3px; }
+  .form-dot.feito { background: rgba(67,224,198,0.35); }
+  .form-pergunta {
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    font-weight: 700; color: #fff;
+    letter-spacing: -0.02em; line-height: 1.25;
+    margin-bottom: 1.75rem; min-height: 2.5em;
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 1.05rem 1.4rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.05rem; font-weight: 400; color: #fff;
+    outline: none; transition: border-color .2s, background .2s;
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.22); }
+  .form-input:focus { border-color: var(--verde-neon); background: rgba(255,255,255,0.08); }
+  .form-pills {
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    justify-content: center; margin-bottom: 0.5rem;
+  }
+  .form-pill {
+    padding: 0.7rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 100px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.04);
+    cursor: pointer; transition: all .2s;
+  }
+  .form-pill:hover { border-color: var(--verde-neon); color: var(--verde-neon); background: rgba(67,224,198,0.06); }
+  .form-pill.selecionado {
+    background: rgba(67,224,198,0.14);
+    border-color: var(--verde-neon); color: var(--verde-neon);
+  }
+  .form-actions {
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
+    margin-top: 1.75rem;
+  }
+  .form-btn-avancar {
+    background: var(--verde-neon); color: var(--verde-escuro);
+    border: none; border-radius: 6px;
+    padding: 0.9rem 2.2rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+  }
+  .form-btn-avancar:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(67,224,198,0.3); }
+  .form-btn-avancar:disabled { opacity: 0.35; cursor: default; transform: none; box-shadow: none; }
+  .form-btn-voltar {
+    background: none; border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.82rem; color: rgba(255,255,255,0.3);
+    cursor: pointer; padding: 0.5rem; transition: color .2s;
+  }
+  .form-btn-voltar:hover { color: rgba(255,255,255,0.65); }
+  .form-hint { font-size: 0.72rem; color: rgba(255,255,255,0.22); margin-top: 0.75rem; }
+  .form-sucesso { text-align: center; padding: 1.5rem 0; }
+  .form-sucesso-check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(67,224,198,0.12);
+    border: 1px solid rgba(67,224,198,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.4rem; color: var(--verde-neon);
+  }
+  .form-sucesso h3 { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }
+  .form-sucesso p { font-size: 0.92rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
+  @media (max-width: 900px) {
+    .form-section { padding: 4rem 1.5rem; }
+    .form-pergunta { min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav-placeholder"></nav>
+
+<section class="hero" id="hero-placeholder">
+  <div class="hero-content fade-in" id="hero-content-placeholder"></div>
+  <div class="hero-right fade-in" id="hero-right-placeholder"></div>
+  <svg class="hero-grafismo" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 20 L100 180 L180 20" stroke="#43E0C6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <line x1="20" y1="200" x2="180" y2="200" stroke="#43E0C6" stroke-width="8" stroke-linecap="round"/>
+    <path d="M60 10 L100 20 L140 10" stroke="#43E0C6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</section>
+
+<div class="logos-bar" id="logos-placeholder"></div>
+
+<section class="proposta fade-in" id="proposta-placeholder"></section>
+
+<section class="form-section" id="formulario">
+  <div class="form-inner">
+    <div class="form-escola-tag">Sou Escola</div>
+    <div id="form-wizard"></div>
+  </div>
+</section>
+
+<section class="ia-section" id="ia">
+  <div class="ia-inner fade-in" id="ia-placeholder"></div>
+</section>
+
+<section class="acomp-section" id="acompanhamento">
+  <div id="acomp-placeholder"></div>
+</section>
+
+<section class="ciclo-section" id="ciclo" style="background: #fff; padding: 6rem 4rem;">
+  <div id="ciclo-placeholder"></div>
+</section>
+
+<section class="servicos" id="servicos">
+  <div id="servicos-placeholder"></div>
+</section>
+
+<section class="comparativo" id="comparativo-placeholder"></section>
+
+<section class="case-section" id="case">
+  <div id="case-placeholder"></div>
+</section>
+
+<section class="cta-final" id="cta">
+  <div id="cta-placeholder"></div>
+</section>
+
+<footer id="footer-placeholder"></footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  EDITE AQUI — Todos os textos e dados do site estão abaixo.
+//  Não é necessário mexer em nenhuma outra parte do arquivo.
+// ═══════════════════════════════════════════════════════════════
+
+const CONFIG = {
+
+  // ── Dados gerais da empresa ──────────────────────────────────
+  empresa: {
+    nome: "Minerva",
+    slogan: "Performance Digital para Educação",
+    local: "São Paulo, Brasil",
+    ano: "2025",
+    cta_link: "#formulario",     // Link do botão "Agendar Reunião" no menu
+    whatsapp_link: "#",         // Cole aqui o link do WhatsApp ou formulário
+  },
+
+  // ── Formulário de captação ───────────────────────────────────
+  formulario: {
+    webhook: "https://hook.us2.make.com/h8rfq7xc5kcq8g6lpwt6pvqw2j8hcu1n",
+    categorias: ["Infantil", "Fund. I", "Fund. II", "Ensino Médio"],
+  },
+
+  // ── Menu de navegação ────────────────────────────────────────
+  nav: [
+    { texto: "Os 3 Pilares",      href: "#servicos" },
+    { texto: "Performance Real",   href: "#ia" },
+    { texto: "Acompanhamento",     href: "#acompanhamento" },
+    { texto: "Case",               href: "#case" },
+  ],
+
+  // ── Seção Hero (topo) ────────────────────────────────────────
+  hero: {
+    tag: "Performance Digital para Educação",
+    titulo: "Tráfego + Automações<br>+ <em>CRM Educacional</em>.<br>Integrados.",
+    subtitulo: "Não somos agência generalista nem apenas tráfego pago. Somos especialistas em performance digital para escolas — integrando captação (Google + Meta Ads), nurturing automático (WhatsApp + Email) e CRM desenhado para jornada educacional. Tudo conectado e monitorado por IA 24h por dia.",
+    btn_primario:   { texto: "Agendar reunião gratuita", href: "#cta" },
+    btn_secundario: { texto: "Ver os 3 pilares",          href: "#servicos" },
+
+    // Números de destaque abaixo dos botões
+    metricas: [
+      { num: "R$14–18",  label: "CPL alvo (educação)" },
+      { num: "+40%",     label: "Aumento em 90 dias" },
+      { num: "3 pilares", label: "Integrados na operação" },
+    ],
+
+    // Mockup do celular (exemplo de mensagem diária)
+    phone: {
+      escola: "Colégio São Lucas",
+      hora:   "07h42",
+      mensagem: "Bom dia! Ontem: <strong>24 leads</strong>, CPL <strong>R$16</strong>. Nurturing automático em dia. <strong>2 matrículas confirmadas</strong> de leads da semana anterior. Meta do mês: 78% ✓",
+      stats: [
+        { num: "24",     label: "Leads ontem" },
+        { num: "R$16",   label: "CPL médio" },
+        { num: "2",      label: "Matrículas conf." },
+        { num: "78%",    label: "Meta do mês" },
+      ],
+    },
+  },
+
+  // ── Clientes atendidos (barra de logos) ─────────────────────
+  // Adicione, remova ou renomeie as escolas à vontade.
+  clientes: [
+    "Escola Mais — SP",
+    "Colégio São Lucas — SP",
+    "Colégio Lourenço Castanho — SP",
+    "Escola Concept — SP & Salvador",
+    "Colégio Einstein — Ribeirão Preto",
+    "Faculdade do Comércio — SP",
+  ],
+
+  // ── Seção "Por que Minerva" ──────────────────────────────────
+  proposta: {
+    tag:    "Por que escolher a Minerva",
+    titulo: "3 pilares integrados<br>pensados para <em>educação.</em>",
+    textos: [
+      "Tráfego pago isolado não gera matrículas sustentáveis. Responsáveis entram no funil, mas sem nurturing dedicado, morrem na conversão. Relatórios chegam tarde. Dados são tratados como e-commerce, não como educação.",
+      "A Minerva integra Tráfego Pago + Automações Criativas + CRM Educacional. Cada pilar conversa com o outro. Você vê o resultado real: de clique até matrícula confirmada e aluno engajado.",
+    ],
+    cards: [
+      {
+        icone: "🎯",
+        titulo: "Tráfego Pago Educacional",
+        texto:  "Google Ads + Meta Ads segmentado para responsáveis. Estratégias que respeitam o ciclo escolar (jan/fev e jun/jul como janelas principais).",
+      },
+      {
+        icone: "🤖",
+        titulo: "Automações Criativas & Relatórios",
+        texto:  "WhatsApp bots + Email nurturing + Relatórios diários até 8h. Sem manualidade. Sem espera. Conversão por meio da jornada, não por força.",
+      },
+      {
+        icone: "📊",
+        titulo: "CRM Educacional",
+        texto:  "Ferramenta desenhada para educação, não genérica. Lead scoring por engajamento. Rastreamento: interessado → aluno → engajado.",
+      },
+    ],
+  },
+
+  // ── Seção IA ─────────────────────────────────────────────────
+  ia: {
+    tag:      "Foco em Resultado Real",
+    titulo:   "Performance Digital significa<br><em>matrícula confirmada</em>,<br>não apenas lead.",
+    subtitulo: "Tráfego isolado é insuficiente. Responsável entra no funil, mas sem nurturing, automation e CRM educacional integrados, o lead morre. A Minerva mede sucesso diferente.",
+    cards: [
+      {
+        num:    "01 / Tráfego Pago",
+        titulo: "Captação com intenção",
+        texto:  "Google Ads + Meta Ads + WhatsApp Ads. Responsáveis buscando ativamente ou abertos à descoberta. Segmentação por fase escolar e perfil decisório.",
+        bullets: [
+          "CPL alvo: R$14–18 (educação)",
+          "Remarketing para quem visitou",
+          "Otimizações baseadas em padrão educacional",
+        ],
+      },
+      {
+        num:    "02 / Automações",
+        titulo: "Nurturing contínuo, 24h",
+        texto:  "WhatsApp bots + Email templates + Relatórios automáticos. Sem esperar reunião. Sem manual. Jornada educacional integrada.",
+        bullets: [
+          "Resposta imediata via WhatsApp",
+          "Email sequences por fase da jornada",
+          "Relatório diário até 8h no seu celular",
+        ],
+      },
+      {
+        num:    "03 / CRM Educacional",
+        titulo: "Lead scoring por engajamento",
+        texto:  "Plataforma pensada para jornada educacional. Rastreia: interessado → aluno → engajado. Diferentes de CRM genérico.",
+        bullets: [
+          "Score: probabilidade real de matrícula",
+          "Histórico completo de jornada",
+          "Integração com plataformas de matrículas",
+        ],
+      },
+    ],
+  },
+
+  // ── Seção Acompanhamento ─────────────────────────────────────
+  acompanhamento: {
+    tag:      "Acompanhamento & Transparência",
+    titulo:   "Você sabe exatamente<br>onde estão as <em>matrículas.</em>",
+    subtitulo: "Não é um lead que chegou e desapareceu. Você rastreia de verdade: de clique, até matrícula confirmada, até aluno engajado. Transparência ativa todos os dias.",
+    itens: [
+      {
+        freq:   "📲 Todo dia até 8h",
+        titulo: "Briefing no WhatsApp",
+        texto:  "Resumo em texto claro, sem jargão, sem planilha. Leva 30 segundos para ler.",
+        bullets: [
+          "Leads que chegaram ontem",
+          "CPL do dia",
+          "Status de campanhas (ótimo/bom/atenção)",
+          "Matrículas confirmadas (não só leads)",
+          "Se houve ação da equipe",
+        ],
+      },
+      {
+        freq:   "📊 Toda semana",
+        titulo: "Relatório de Performance",
+        texto:  "Painel web com evolução semanal, comparativos, análise de canais e recomendações claras.",
+        bullets: [
+          "Leads vs. Matrículas vs. Meta",
+          "Desempenho por canal",
+          "Análise de criativos",
+          "Projeção para o mês",
+          "Próximos passos",
+        ],
+      },
+      {
+        freq:   "📅 Todo mês",
+        titulo: "Reunião Estratégica",
+        texto:  "Revisão completa + planejamento da próxima janela de matrículas (jan/fev ou jun/jul).",
+        bullets: [
+          "Análise de resultado: leads, matrículas, retenção",
+          "O que funcionou, o que precisa ajuste",
+          "Planejamento antecipado para próxima sazonalidade",
+          "Estratégia de budget e canais",
+        ],
+      },
+    ],
+    highlight: {
+      titulo:   "Você acorda informado. Sem esperar reunião. Sem planilha.",
+      texto:    "Quando algo muda — para melhor ou pior — você é o primeiro a saber. Em tempo real. Direto.",
+      mensagem: "Bom dia! Ontem: 24 leads, CPL R$16. Nurturing em dia. 2 matrículas confirmadas de leads da semana anterior. Budget utilizado 76%. Nenhuma ação necessária hoje. Campanha estável ✓",
+    },
+  },
+
+  // ── Ciclo Escolar ────────────────────────────────────────────
+  ciclo: {
+    tag:      "Estratégia Sazonal",
+    titulo:   "O ciclo escolar<br>é <em>core</em> da estratégia.",
+    subtitulo: "Escolas não têm procura constante. Há janelas bem definidas: jan/fev (matrículas novas + rematrícula) e jun/jul (meio de ano). Agências generalistas não sabem isso. A Minerva planeja antecipadamente para cada janela.",
+    periodos: [
+      {
+        trimestre: "Jul–Set",
+        titulo: "Aquecimento da audiência",
+        acao: "Prospecção antecipada, testes de público, conteúdo educacional",
+        budget: "20% do orçamento anual",
+      },
+      {
+        trimestre: "Out–Dez",
+        titulo: "Matrículas novas",
+        acao: "🔴 MÁXIMO INVESTIMENTO — campanhas em alta velocidade",
+        budget: "40–50% do orçamento anual",
+      },
+      {
+        trimestre: "Jan–Fev",
+        titulo: "Conversão + Rematrícula",
+        acao: "🔴 Acompanhamento intensivo — finalizar leads, confirmações",
+        budget: "Continuação intensa",
+      },
+      {
+        trimestre: "Mar–Jun",
+        titulo: "Planejamento e matrículas de meio de ano",
+        acao: "Análise de resultados + preparação da janela de julho",
+        budget: "20–30% do orçamento anual",
+      },
+    ],
+    destaque: "Isso significa: sua estratégia muda a cada 8–10 semanas. Não é campanha que roda o ano todo. É planejamento antecipad, execução ajustada e resultado medido por sazonalidade.",
+  },
+
+  // ── Seção Serviços ──────────────────────────────────────────
+  servicos: {
+    tag:    "Os 3 Pilares",
+    titulo: "Tráfego + Automações<br>+ <em>CRM Educacional</em>",
+    cards: [
+      {
+        icone: "📊",
+        titulo: "Pilar 1: Tráfego Pago",
+        texto:  "Google Ads para captação intencional (pais buscando ativamente). Meta Ads com segmentação por responsável. WhatsApp Ads com conversão direta. Remarketing educacional para quem visitou e ainda não converteu.",
+      },
+      {
+        icone: "🔄",
+        titulo: "Pilar 2: Automações & Relatórios",
+        texto:  "WhatsApp bots para atendimento inicial. Email marketing com jornada de nurturing respeitando sazonalidade. Relatórios diários até 8h no seu celular. Nada manual. Tudo integrado.",
+      },
+      {
+        icone: "💾",
+        titulo: "Pilar 3: CRM Educacional",
+        texto:  "Plataforma própria para lead scoring, nurturing e acompanhamento de jornada. Diferente de CRM genérico, entende: interessado vs aluno, retenção, ciclo escolar.",
+      },
+      {
+        icone: "🛠️",
+        titulo: "Landing Pages Otimizadas",
+        texto:  "Páginas criadas para converter visitas em leads qualificados. Testadas com responsáveis de educação. Velocidade mobile otimizada.",
+      },
+      {
+        icone: "📈",
+        titulo: "Rastreamento do Funil Completo",
+        texto:  "Do clique ao relatório de matrícula confirmada. Dados conectados. Sem silos. Você vê a jornada inteira.",
+      },
+      {
+        icone: "🎓",
+        titulo: "Consultoria Educacional",
+        texto:  "Especialista que entende ciclo escolar, sazonalidade de matrículas e nuances da educação. Não genérico.",
+      },
+    ],
+  },
+
+  // ── Tabela comparativa ───────────────────────────────────────
+  comparativo: {
+    tag:    "Diferença Real",
+    titulo: "Agência generalista<br>vs. <em>Performance Digital Integrada</em>",
+    linhas: [
+      { criterio: "Especialização",                agencia: "Multi-segmento (e-commerce, SaaS, tudo)",      minerva: "100% educação desde o dia 1" },
+      { criterio: "O que oferece",                 agencia: "Tráfego pago isolado",                        minerva: "Tráfego + Automações + CRM integrados" },
+      { criterio: "Conhecimento de educação",     agencia: "Genérico, aprendido no contrato",             minerva: "Profundo: ciclo escolar, sazonalidade, jornada responsável" },
+      { criterio: "Métrica de sucesso",           agencia: "CPL (número de leads)",                       minerva: "Matrícula confirmada + Aluno engajado na jornada" },
+      { criterio: "Relatório",                    agencia: "Mensal, se você cobrar",                      minerva: "Diário no seu celular, antes das 8h" },
+      { criterio: "Detecção de problemas",        agencia: "Quando já afetou o resultado",                minerva: "Antes de virar prejuízo (IA 24h)" },
+      { criterio: "Decisões baseadas em",         agencia: "Intuição do account",                         minerva: "Dados + padrões educacionais" },
+      { criterio: "Integração com CRM",           agencia: "Não (CRM genérico, se houver)",               minerva: "Sim, desenhado para jornada educacional" },
+    ],
+  },
+
+  // ── Case de sucesso ──────────────────────────────────────────
+  // Para adicionar mais cases futuramente, transforme isso em um array.
+  case: {
+    tag:    "Case de Sucesso",
+    titulo: "Colégio São Lucas<br>Integração Performance Digital",
+    texto:  "Escola de médio porte em SP. Campanhas anteriores com tráfego pago isolado, sem automação, sem CRM integrado. Resultado: CPL alto (R$80+), leads perdidos, matrículas baixas. Em 90 dias com a Minerva (3 pilares integrados): mudança completa.",
+    rodape: "Google Ads + Meta Ads + WhatsApp + Email Nurturing + CRM · 90 dias",
+    metricas: [
+      { num: "R$14",  label: "CPL (era R$82)" },
+      { num: "3.2k",  label: "Leads gerados" },
+      { num: "127",   label: "Matrículas confirmadas (+42% vs. ano anterior)" },
+    ],
+  },
+
+  // ── CTA final ────────────────────────────────────────────────
+  cta: {
+    titulo:   "Performance Digital não é só tráfego pago.<br>É <em>matrícula confirmada.</em>",
+    subtitulo: "Quando Tráfego + Automações + CRM Educacional trabalham integrados, com IA monitorando 24h e você informado todos os dias, o resultado é diferente. Matrículas crescem. Ciclo de conversão cai. Você dorme tranquilo.",
+    btn:      "Agendar reunião gratuita",
+    micro:    "30 min. Sem compromisso. Você sai com diagnóstico das suas campanhas.",
+    link:     "#formulario",
+  },
+
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  FIM DA ÁREA DE EDIÇÃO — não altere o código abaixo.
+// ═══════════════════════════════════════════════════════════════
+
+// Garante que a página sempre abre no topo
+if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+
+// Título da aba
+document.title = `${CONFIG.empresa.nome} — ${CONFIG.empresa.slogan}`;
+
+// ── NAV ──────────────────────────────────────────────────────
+document.getElementById('nav-placeholder').innerHTML = `
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-bar"></span>${CONFIG.empresa.nome}<span>.</span>
+  </a>
+  <ul>
+    ${CONFIG.nav.map(item => `<li><a href="${item.href}">${item.texto}</a></li>`).join('')}
+  </ul>
+  <a href="${CONFIG.empresa.cta_link}" class="nav-cta">Agendar Reunião</a>
+`;
+
+// ── HERO ─────────────────────────────────────────────────────
+const h = CONFIG.hero;
+document.getElementById('hero-content-placeholder').innerHTML = `
+  <span class="hero-tag">${h.tag}</span>
+  <h1>${h.titulo}</h1>
+  <p class="hero-sub">${h.subtitulo}</p>
+  <div class="hero-actions">
+    <a href="${h.btn_primario.href}" class="btn-primary">${h.btn_primario.texto}</a>
+    <a href="${h.btn_secundario.href}" class="btn-ghost">${h.btn_secundario.texto}</a>
+  </div>
+  <div class="hero-metrics">
+    ${h.metricas.map(m => `
+      <div class="hero-metric">
+        <span class="hero-metric-num">${m.num}</span>
+        <div class="hero-metric-label">${m.label}</div>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+document.getElementById('hero-right-placeholder').innerHTML = `
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-header">📲 ${CONFIG.empresa.nome} · Resumo do dia</div>
+      <div class="phone-msg">
+        <div class="phone-msg-label">${h.phone.escola} · Hoje, ${h.phone.hora}</div>
+        <p>${h.phone.mensagem}</p>
+      </div>
+      <div class="phone-stats">
+        ${h.phone.stats.map(s => `
+          <div class="phone-stat">
+            <span class="phone-stat-num">${s.num}</span>
+            <span class="phone-stat-label">${s.label}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="phone-divider"></div>
+      <div class="phone-chip">IA · Operação normal</div>
+    </div>
+  </div>
+`;
+
+// ── CLIENTES ─────────────────────────────────────────────────
+document.getElementById('logos-placeholder').innerHTML = `
+  <span class="logos-label">Escolas atendidas</span>
+  <div class="logos-track">
+    ${CONFIG.clientes.map(c => `<div class="logo-pill">${c}</div>`).join('')}
+  </div>
+`;
+
+// ── PROPOSTA ─────────────────────────────────────────────────
+const p = CONFIG.proposta;
+document.getElementById('proposta-placeholder').innerHTML = `
+  <div class="proposta-text">
+    <span class="section-tag">${p.tag}</span>
+    <h2>${p.titulo}</h2>
+    ${p.textos.map(t => `<p>${t}</p>`).join('')}
+  </div>
+  <div class="proposta-cards">
+    ${p.cards.map(c => `
+      <div class="proposta-card">
+        <div class="proposta-card-icon">${c.icone}</div>
+        <div>
+          <h3>${c.titulo}</h3>
+          <p>${c.texto}</p>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+// ── IA ───────────────────────────────────────────────────────
+const ia = CONFIG.ia;
+document.getElementById('ia-placeholder').innerHTML = `
+  <span class="section-tag">${ia.tag}</span>
+  <h2>${ia.titulo}</h2>
+  <p class="ia-subtitle">${ia.subtitulo}</p>
+  <div class="ia-grid">
+    ${ia.cards.map(c => `
+      <div class="ia-card">
+        <div class="ia-card-num">${c.num}</div>
+        <h3>${c.titulo}</h3>
+        <p>${c.texto}</p>
+        <ul>${c.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+// ── ACOMPANHAMENTO ───────────────────────────────────────────
+const ac = CONFIG.acompanhamento;
+document.getElementById('acomp-placeholder').innerHTML = `
+  <div class="acomp-header fade-in">
+    <span class="section-tag">${ac.tag}</span>
+    <h2>${ac.titulo}</h2>
+    <p>${ac.subtitulo}</p>
+  </div>
+  <div class="acomp-timeline fade-in">
+    ${ac.itens.map(i => `
+      <div class="acomp-item">
+        <div class="acomp-freq">${i.freq}</div>
+        <h3>${i.titulo}</h3>
+        <p>${i.texto}</p>
+        <ul class="acomp-bullets">
+          ${i.bullets.map(b => `<li>${b}</li>`).join('')}
+        </ul>
+      </div>
+    `).join('')}
+  </div>
+  <div class="acomp-highlight fade-in">
+    <div class="acomp-highlight-icon">📱</div>
+    <div>
+      <h3>${ac.highlight.titulo}</h3>
+      <p>${ac.highlight.texto}</p>
+    </div>
+    <div class="msg-preview">"${ac.highlight.mensagem}"</div>
+  </div>
+``;
+
+// ── CICLO ESCOLAR ────────────────────────────────────────────
+const cl = CONFIG.ciclo;
+document.getElementById('ciclo-placeholder').innerHTML = `
+  <span class="section-tag">${cl.tag}</span>
+  <h2>${cl.titulo}</h2>
+  <p style="font-size: 1rem; color: var(--cinza-texto); margin-top: 1rem; line-height: 1.7; font-weight: 300; max-width: 600px;">${cl.subtitulo}</p>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem;">
+    ${cl.periodos.map((per, idx) => `
+      <div style="background: var(--cinza-claro); border-radius: 10px; padding: 2rem; border-left: 4px solid ${['var(--verde-neon)', 'var(--verde-medio)', 'var(--verde-escuro)', 'var(--verde-neon)'][idx % 4]};">
+        <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--verde-medio); margin-bottom: 1rem;">${per.trimestre}</div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem;">${per.titulo}</h3>
+        <p style="font-size: 0.83rem; color: var(--cinza-texto); line-height: 1.65; font-weight: 300; margin-bottom: 1rem;">${per.acao}</p>
+        <div style="font-size: 0.78rem; color: var(--verde-medio); font-weight: 600;">${per.budget}</div>
+      </div>
+    `).join('')}
+  </div>
+  <div style="background: var(--verde-escuro); color: #fff; border-radius: 12px; padding: 2rem; margin-top: 3rem;">
+    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); line-height: 1.75; font-weight: 300;">
+      💡 <strong>${cl.destaque}</strong>
+    </p>
+  </div>
+`;
+
+// ── SERVIÇOS ─────────────────────────────────────────────────
+const sv = CONFIG.servicos;
+document.getElementById('servicos-placeholder').innerHTML = `
+  <span class="section-tag">${sv.tag}</span>
+  <h2>${sv.titulo}</h2>
+  <div class="servicos-grid fade-in">
+    ${sv.cards.map(c => `
+      <div class="servico-card">
+        <div class="servico-icon">${c.icone}</div>
+        <h3>${c.titulo}</h3>
+        <p>${c.texto}</p>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+// ── COMPARATIVO ──────────────────────────────────────────────
+const cp = CONFIG.comparativo;
+document.getElementById('comparativo-placeholder').innerHTML = `
+  <span class="section-tag" style="color:var(--verde-neon)">${cp.tag}</span>
+  <h2 style="color:#fff">${cp.titulo}</h2>
+  <div class="comp-table fade-in">
+    <div class="comp-row header">
+      <div class="comp-cell">Critério</div>
+      <div class="comp-cell">Agência Tradicional</div>
+      <div class="comp-cell">${CONFIG.empresa.nome}</div>
+    </div>
+    ${cp.linhas.map(l => `
+      <div class="comp-row">
+        <div class="comp-cell comp-criterio">${l.criterio}</div>
+        <div class="comp-cell">${l.agencia}</div>
+        <div class="comp-cell destaque">${l.minerva}</div>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+// ── CASE ─────────────────────────────────────────────────────
+const cs = CONFIG.case;
+document.getElementById('case-placeholder').innerHTML = `
+  <div class="case-inner fade-in">
+    <div>
+      <div class="case-label">${cs.tag}</div>
+      <h3>${cs.titulo}</h3>
+      <p>${cs.texto}</p>
+      <div class="case-metric-divider"></div>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.35)">${cs.rodape}</p>
+    </div>
+    <div>
+      <div class="case-metrics">
+        ${cs.metricas.map(m => `
+          <div class="case-metric">
+            <span class="case-metric-num">${m.num}</span>
+            <div class="case-metric-label">${m.label}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  </div>
+`;
+
+// ── CTA FINAL ────────────────────────────────────────────────
+const cta = CONFIG.cta;
+document.getElementById('cta-placeholder').innerHTML = `
+  <h2>${cta.titulo}</h2>
+  <p>${cta.subtitulo}</p>
+  <a href="${cta.link}" class="btn-white">${cta.btn}</a>
+  <p class="cta-micro">${cta.micro}</p>
+`;
+
+// ── FOOTER ───────────────────────────────────────────────────
+document.getElementById('footer-placeholder').innerHTML = `
+  <div class="footer-logo">—${CONFIG.empresa.nome}<span>.</span></div>
+  <p>${CONFIG.empresa.slogan} · ${CONFIG.empresa.local}</p>
+  <p style="font-size:0.7rem;color:rgba(255,255,255,0.2)">© ${CONFIG.empresa.ano} ${CONFIG.empresa.nome}</p>
+`;
+
+// ── FORMULÁRIO WIZARD ────────────────────────────────────────
+(function () {
+  const passos = [
+    { campo: 'nome',   tipo: 'text',        pergunta: 'Qual é o seu nome?',           placeholder: 'Maria Silva',       dica: 'Responsável pelo contato' },
+    { campo: 'escola', tipo: 'text',        pergunta: 'Nome da escola?',              placeholder: 'Colégio São Paulo', dica: '' },
+    { campo: 'cat',    tipo: 'multiselect', pergunta: 'Categoria da escola?',         opcoes: CONFIG.formulario.categorias, dica: 'Pode selecionar mais de uma' },
+    { campo: 'cidade', tipo: 'text',        pergunta: 'Em qual cidade?',              placeholder: 'São Paulo',         dica: '' },
+    { campo: 'turmas', tipo: 'number',      pergunta: 'Quantas turmas a escola tem?', placeholder: '12',                dica: 'Número aproximado está ótimo' },
+    { campo: 'zap',    tipo: 'tel',         pergunta: 'Qual é o seu WhatsApp?',       placeholder: '(11) 9 9999-8888',  dica: 'Entraremos em contato por aqui' },
+  ];
+
+  let atual = 0;
+  const dados = {};
+  const wizard = document.getElementById('form-wizard');
+
+  function dots() {
+    return passos.map((_, i) =>
+      `<div class="form-dot ${i === atual ? 'ativo' : i < atual ? 'feito' : ''}"></div>`
+    ).join('');
+  }
+
+  function render() {
+    const p = passos[atual];
+    let corpo = '';
+
+    if (p.tipo === 'multiselect') {
+      corpo = `<div class="form-pills" id="form-pills">
+        ${p.opcoes.map(o => `
+          <button type="button" class="form-pill ${(dados[p.campo] || []).includes(o) ? 'selecionado' : ''}" data-val="${o}">${o}</button>
+        `).join('')}
+      </div>`;
+    } else {
+      corpo = `<input class="form-input" id="form-campo" type="${p.tipo}" placeholder="${p.placeholder}" value="${dados[p.campo] || ''}" autocomplete="off">`;
+    }
+
+    wizard.innerHTML = `
+      <div class="form-progress">${dots()}</div>
+      <div class="form-pergunta">${p.pergunta}</div>
+      ${corpo}
+      ${p.dica ? `<p class="form-hint">${p.dica}</p>` : ''}
+      <div class="form-actions">
+        ${atual > 0 ? `<button type="button" class="form-btn-voltar" id="form-voltar">← Voltar</button>` : ''}
+        <button type="button" class="form-btn-avancar" id="form-avancar">
+          ${atual === passos.length - 1 ? 'Enviar' : 'Continuar →'}
+        </button>
+      </div>
+    `;
+
+    // Event listeners para pills
+    if (p.tipo === 'multiselect') {
+      document.querySelectorAll('.form-pill').forEach(pill => {
+        pill.addEventListener('click', function() {
+          this.classList.toggle('selecionado');
+          if (!dados[p.campo]) dados[p.campo] = [];
+          const val = this.dataset.val;
+          if (this.classList.contains('selecionado')) {
+            if (!dados[p.campo].includes(val)) dados[p.campo].push(val);
+          } else {
+            dados[p.campo] = dados[p.campo].filter(v => v !== val);
+          }
+        });
+      });
+    }
+
+    // Botão avancar
+    document.getElementById('form-avancar').addEventListener('click', function() {
+      const campo = p.campo;
+      
+      if (p.tipo === 'multiselect') {
+        if (!dados[campo] || dados[campo].length === 0) {
+          alert('Selecione pelo menos uma opção');
+          return;
+        }
+      } else {
+        const val = document.getElementById('form-campo')?.value?.trim();
+        if (!val) {
+          alert('Preencha este campo');
+          return;
+        }
+        dados[campo] = val;
+      }
+
+      atual++;
+      if (atual === passos.length) {
+        enviarFormulario();
+      } else {
+        render();
+      }
+    });
+
+    // Botão voltar
+    if (atual > 0) {
+      document.getElementById('form-voltar').addEventListener('click', function() {
+        atual--;
+        render();
+      });
+    }
+  }
+
+  function enviarFormulario() {
+    const payload = {
+      nome: dados.nome,
+      email: dados.email,
+      escola: dados.escola,
+      segmento: dados.segmento,
+      turmas: parseInt(dados.turmas),
+      whatsapp: dados.zap,
+    };
+
+    fetch(CONFIG.formulario.webhook, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(r => r.json())
+    .then(d => {
+      wizard.innerHTML = `
+        <div class="form-sucesso">
+          <div class="form-sucesso-check">✓</div>
+          <h3>Formulário enviado!</h3>
+          <p>Obrigado! Entraremos em contato no seu WhatsApp em breve. Uma reunião gratuita de diagnóstico está marcada para os próximos dias.</p>
+        </div>
+      `;
+    })
+    .catch(e => {
+      alert('Erro ao enviar. Tente novamente ou envie um WhatsApp');
+      console.error(e);
+      atual--;
+      render();
+    });
+  }
+
+  render();
+});
+
+// ── Scroll fade-in animation ─────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => {
+  observer.observe(el);
+});
+
+// ── Seções dinâmicas (renderização em JavaScript) ─────────────
+document.addEventListener('DOMContentLoaded', function() {
+
+  // PROPOSTA
+  const p = CONFIG.proposta;
+  document.getElementById('proposta-placeholder').innerHTML = `
+    <div>
+      <span class="section-tag">${p.tag}</span>
+      <h2>${p.titulo}</h2>
+      ${p.textos.map(t => `<p>${t}</p>`).join('')}
+    </div>
+    <div class="proposta-cards">
+      ${p.cards.map(c => `
+        <div class="proposta-card">
+          <div class="proposta-card-icon">${c.icone}</div>
+          <div>
+            <h3>${c.titulo}</h3>
+            <p>${c.texto}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // CLIENTES
+  document.getElementById('logos-placeholder').innerHTML = `
+    <span class="logos-label">Escolas atendidas</span>
+    <div class="logos-track">
+      ${CONFIG.clientes.map(c => `<div class="logo-pill">${c}</div>`).join('')}
+    </div>
+  `;
+
+  // IA / RESULTADO REAL
+  const ia = CONFIG.ia;
+  document.getElementById('ia-placeholder').innerHTML = `
+    <span class="section-tag">${ia.tag}</span>
+    <h2>${ia.titulo}</h2>
+    <p class="ia-subtitle">${ia.subtitulo}</p>
+    <div class="ia-grid">
+      ${ia.cards.map(c => `
+        <div class="ia-card">
+          <div class="ia-card-num">${c.num}</div>
+          <h3>${c.titulo}</h3>
+          <p>${c.texto}</p>
+          <ul>
+            ${c.bullets.map(b => `<li>${b}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // ACOMPANHAMENTO
+  const ac = CONFIG.acompanhamento;
+  document.getElementById('acomp-placeholder').innerHTML = `
+    <div class="acomp-header">
+      <span class="section-tag">${ac.tag}</span>
+      <h2>${ac.titulo}</h2>
+      <p>${ac.subtitulo}</p>
+    </div>
+    <div class="acomp-timeline">
+      ${ac.itens.map(i => `
+        <div class="acomp-item">
+          <div class="acomp-freq">${i.freq}</div>
+          <h3>${i.titulo}</h3>
+          <p>${i.texto}</p>
+          <ul class="acomp-bullets">
+            ${i.bullets.map(b => `<li>${b}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('')}
+    </div>
+    <div class="acomp-highlight">
+      <div class="acomp-highlight-icon">📱</div>
+      <div>
+        <h3>${ac.highlight.titulo}</h3>
+        <p>${ac.highlight.texto}</p>
+      </div>
+      <div class="msg-preview">${ac.highlight.mensagem}</div>
+    </div>
+  `;
+
+  // CICLO ESCOLAR
+  const ciclo = CONFIG.ciclo;
+  document.getElementById('ciclo-placeholder').innerHTML = `
+    <span class="section-tag">${ciclo.tag}</span>
+    <h2>${ciclo.titulo}</h2>
+    <p style="font-size: 1rem; color: var(--cinza-texto); margin: 1.5rem 0; line-height: 1.7; font-weight: 300;">
+      ${ciclo.subtitulo}
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem;">
+      ${ciclo.periodos.map(per => `
+        <div style="border: 1px solid rgba(0,61,47,0.08); border-radius: 10px; padding: 2rem; background: #fff; transition: border-color .2s;">
+          <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--verde-neon); margin-bottom: 0.75rem;">
+            ${per.trimestre}
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: var(--verde-escuro);">
+            ${per.titulo}
+          </h3>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--cinza-texto); margin-bottom: 1rem;">
+            ${per.acao}
+          </p>
+          <p style="font-size: 0.78rem; color: var(--verde-medio); font-weight: 600; border-top: 1px solid rgba(0,61,47,0.08); padding-top: 1rem;">
+            ${per.budget}
+          </p>
+        </div>
+      `).join('')}
+    </div>
+    <div style="background: rgba(67,224,198,0.08); border-left: 4px solid var(--verde-neon); border-radius: 8px; padding: 2rem; margin-top: 3rem; font-size: 0.95rem; color: var(--verde-escuro); line-height: 1.7;">
+      ${ciclo.destaque}
+    </div>
+  `;
+
+  // SERVIÇOS
+  const srv = CONFIG.servicos;
+  document.getElementById('servicos-placeholder').innerHTML = `
+    <span class="section-tag">${srv.tag}</span>
+    <h2>${srv.titulo}</h2>
+    <div class="servicos-grid">
+      ${srv.cards.map(c => `
+        <div class="servico-card">
+          <div class="servico-icon">${c.icone}</div>
+          <h3>${c.titulo}</h3>
+          <p>${c.texto}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // COMPARATIVO
+  const comp = CONFIG.comparativo;
+  document.getElementById('comparativo-placeholder').innerHTML = `
+    <span class="section-tag">${comp.tag}</span>
+    <h2>${comp.titulo}</h2>
+    <div class="comp-table">
+      <div class="comp-row header">
+        <div class="comp-cell"></div>
+        <div class="comp-cell">Agência Generalista</div>
+        <div class="comp-cell">Minerva</div>
+      </div>
+      ${comp.linhas.map(l => `
+        <div class="comp-row">
+          <div class="comp-cell comp-criterio">${l.criterio}</div>
+          <div class="comp-cell">${l.agencia}</div>
+          <div class="comp-cell comp-destaque">${l.minerva}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // CASE
+  const cs = CONFIG.case;
+  document.getElementById('case-placeholder').innerHTML = `
+    <div class="case-inner">
+      <div>
+        <span class="case-label">${cs.tag}</span>
+        <h3>${cs.titulo}</h3>
+        <p>${cs.texto}</p>
+        <p style="margin-top: 1.5rem; font-size: 0.8rem; color: rgba(255,255,255,0.35); font-weight: 300;">
+          ${cs.rodape}
+        </p>
+      </div>
+      <div class="case-metrics">
+        ${cs.metricas.map(m => `
+          <div class="case-metric">
+            <span class="case-metric-num">${m.num}</span>
+            <span class="case-metric-label">${m.label}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  // CTA FINAL
+  const cta = CONFIG.cta;
+  document.getElementById('cta-placeholder').innerHTML = `
+    <h2>${cta.titulo}</h2>
+    <p>${cta.subtitulo}</p>
+    <a href="${cta.link}" class="btn-white">${cta.btn}</a>
+    <div class="cta-micro">${cta.micro}</div>
+  `;
+
+  // FOOTER
+  document.getElementById('footer-placeholder').innerHTML = `
+    <div class="footer-logo"><span class="nav-logo-bar"></span>Minerva<span>.</span></div>
+    <p>&copy; 2025 Minerva. Todos os direitos reservados.</p>
+  `;
+
+});
+</script>
+</body>
+</html>
+    `;
+
+    const btnAv = document.getElementById('form-avancar');
+    const btnVo = document.getElementById('form-voltar');
+
+    if (p.tipo === 'multiselect') {
+      document.querySelectorAll('.form-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          const val = pill.dataset.val;
+          if (!dados[p.campo]) dados[p.campo] = [];
+          if (dados[p.campo].includes(val)) {
+            dados[p.campo] = dados[p.campo].filter(v => v !== val);
+            pill.classList.remove('selecionado');
+          } else {
+            dados[p.campo].push(val);
+            pill.classList.add('selecionado');
+          }
+        });
+      });
+    } else {
+      const campo = document.getElementById('form-campo');
+      campo.focus();
+      campo.addEventListener('input', () => { dados[p.campo] = campo.value; });
+      campo.addEventListener('keydown', e => { if (e.key === 'Enter') btnAv.click(); });
+    }
+
+    btnAv.addEventListener('click', () => {
+      const val = dados[p.campo];
+      const vazio = p.tipo === 'multiselect' ? (!val || val.length === 0) : (!val || !String(val).trim());
+      if (vazio) return;
+      if (atual < passos.length - 1) { atual++; render(); } else { enviar(); }
+    });
+
+    if (btnVo) btnVo.addEventListener('click', () => { atual--; render(); });
+  }
+
+  async function enviar() {
+    wizard.innerHTML = `<p style="text-align:center;color:rgba(255,255,255,0.4);font-size:0.9rem;padding:2rem 0">Enviando...</p>`;
+
+    const payload = {
+      nome:      dados.nome,
+      escola:    dados.escola,
+      categoria: (dados.cat || []).join(', '),
+      cidade:    dados.cidade,
+      turmas:    dados.turmas,
+      whatsapp:  dados.zap,
+      origem:    'Site Minerva',
+      data:      new Date().toLocaleString('pt-BR'),
+    };
+
+    try {
+      if (CONFIG.formulario.webhook) {
+        await fetch(CONFIG.formulario.webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      }
+    } catch (_) {}
+
+    const primeiro = dados.nome ? dados.nome.split(' ')[0] : '';
+    wizard.innerHTML = `
+      <div class="form-sucesso">
+        <div class="form-sucesso-check">✓</div>
+        <h3>Recebido, ${primeiro}.</h3>
+        <p>Entraremos em contato pelo WhatsApp em breve.<br>Geralmente respondemos no mesmo dia.</p>
+      </div>
+    `;
+  }
+
+  render();
+})();
+
+// ── Animação de entrada ──────────────────────────────────────
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
