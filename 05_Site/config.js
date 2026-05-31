@@ -290,7 +290,7 @@ const CONFIG = {
     // ⚠️ IMPORTANTE: Webhook NUNCA deve estar aqui!
     // Deve ser chamado via API backend: POST /api/forms/submit
     categorias: ["Infantil", "Fund. I", "Fund. II", "Ensino Médio"],
-    apiEndpoint: "http://localhost:3000/api/forms/submit", // Endpoint seguro no backend
+    apiEndpoint: "https://minerva-production-3979.up.railway.app/api/forms/submit", // Endpoint seguro no backend
   },
 };
 
