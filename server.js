@@ -2,19 +2,22 @@
 // ═══════════════════════════════════════════════════════════════
 
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
-const axios = require('axios');
+const express    = require('express');
+const cors       = require('cors');
+const rateLimit  = require('express-rate-limit');
+const axios      = require('axios');
+
+// ── [1/3] IMPORTA A LIB DE VALIDAÇÃO ─────────────────────────
+const { validarTelefone } = require('./lib/phone');
 
 const app = express();
 
 // ─── Configurações ────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
+const PORT        = process.env.PORT || 3000;
 const WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL;
 const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',');
 
-// ─── Middleware: CORS (Controle de Origem) ───────────────────
+// ─── Middleware: CORS ─────────────────────────────────────────
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || CORS_ORIGINS.includes(origin.trim())) {
@@ -31,10 +34,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 
-// ─── Middleware: Rate Limiting (Proteção contra Spam) ────────
+// ─── Middleware: Rate Limiting ────────────────────────────────
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // Máximo 5 requisições por IP
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: 'Muitas requisições. Tente novamente mais tarde.',
   standardHeaders: true,
   legacyHeaders: false,
@@ -44,30 +47,20 @@ app.use('/api/', limiter);
 
 // ─── Funções Auxiliares ───────────────────────────────────────
 
-// Validar email
 function isValidEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
 
-// Validar telefone (apenas dígitos, 10-11 números)
-function isValidPhone(phone) {
-  const cleaned = phone.replace(/\D/g, '');
-  return cleaned.length >= 10 && cleaned.length <= 11;
-}
-
-// Sanitizar string (remover HTML)
 function sanitizeString(str) {
   if (typeof str !== 'string') return '';
-  return str
-    .trim()
-    .replace(/[<>]/g, '') // Remove < e >
-    .substring(0, 100); // Limita a 100 caracteres
+  return str.trim().replace(/[<>]/g, '').substring(0, 100);
 }
 
-// Validar dados do formulário
+// ── [2/3] VALIDATEFORMDATA — usa lib/phone no lugar de isValidPhone ──
 function validateFormData(data) {
   const errors = [];
+  let telefoneValidado = null;
 
   if (!data.nome || data.nome.trim().length < 3) {
     errors.push('Nome deve ter pelo menos 3 caracteres');
@@ -77,35 +70,37 @@ function validateFormData(data) {
     errors.push('Nome da escola inválido');
   }
 
-  if (!data.whatsapp || data.whatsapp.replace(/\D/g, '').length < 10) {
-    errors.push('WhatsApp inválido');
-  }
-
   if (!data.cidade || data.cidade.trim().length < 2) {
     errors.push('Cidade inválida');
+  }
+
+  // Validação de telefone com DDD real + normalização E.164
+  const phoneResult = validarTelefone(data.whatsapp || '');
+  if (!phoneResult.valido) {
+    errors.push(phoneResult.mensagem);
+  } else {
+    telefoneValidado = phoneResult;
   }
 
   return {
     isValid: errors.length === 0,
     errors,
+    telefoneValidado, // { e164, tipo, whatsapp: "alta"|"baixa" }
   };
 }
 
 // ─── ROTAS ────────────────────────────────────────────────────
 
-// Health Check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Rota POST: Receber formulário
 app.post('/api/forms/submit', async (req, res) => {
   try {
-    // Log da requisição
     console.log(`[${new Date().toISOString()}] Formulário recebido de: ${req.ip}`);
     console.log('Dados:', JSON.stringify(req.body, null, 2));
 
-    // ─── VALIDAÇÃO ─────────────────────────────────
+    // ─── VALIDAÇÃO ──────────────────────────────────────────
     const validation = validateFormData(req.body);
     if (!validation.isValid) {
       console.warn('Validação falhou:', validation.errors);
@@ -116,32 +111,34 @@ app.post('/api/forms/submit', async (req, res) => {
       });
     }
 
-    // ─── SANITIZAÇÃO ───────────────────────────────
-    const sanitizedData = {
-  nome:      sanitizeString(req.body.nome),
-  escola:    sanitizeString(req.body.escola),
-  categoria: sanitizeString(req.body.categoria || ''),
-  cidade:    sanitizeString(req.body.cidade),
-  alunos:    parseInt(String(req.body.alunos).replace(/\D/g, '')) || 0,
-  whatsapp:  req.body.whatsapp.replace(/\D/g, ''),
-  origem:    sanitizeString(req.body.origem || 'Site Minerva'),
-  data:      sanitizeString(req.body.data || ''),
-  timestamp: new Date().toISOString(),
-};
+    // ── [3/3] SANITIZAÇÃO — inclui campos normalizados do telefone ──
+    const { telefoneValidado } = validation;
 
-    // ─── CHAMAR WEBHOOK MAKE ───────────────────────
+    const sanitizedData = {
+      nome:               sanitizeString(req.body.nome),
+      escola:             sanitizeString(req.body.escola),
+      categoria:          sanitizeString(req.body.categoria || ''),
+      cidade:             sanitizeString(req.body.cidade),
+      alunos:             parseInt(String(req.body.alunos).replace(/\D/g, '')) || 0,
+      whatsapp:           telefoneValidado.e164,           // "+5511999999999" (E.164)
+      whatsapp_original:  String(req.body.whatsapp).trim(), // o que o usuário digitou
+      whatsapp_provavel:  telefoneValidado.whatsapp,       // "alta" | "baixa"
+      tipo_telefone:      telefoneValidado.tipo,           // "celular" | "fixo"
+      origem:             sanitizeString(req.body.origem || 'Site Minerva'),
+      data:               sanitizeString(req.body.data || ''),
+      timestamp:          new Date().toISOString(),
+    };
+
+    // ─── CHAMAR WEBHOOK MAKE ────────────────────────────────
     console.log('Enviando para Make webhook...');
-    
+
     const makeResponse = await axios.post(WEBHOOK_URL, sanitizedData, {
-      timeout: 10000, // 10 segundos de timeout
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      timeout: 10000,
+      headers: { 'Content-Type': 'application/json' },
     });
 
     console.log('Make webhook respondeu com sucesso');
 
-    // ─── RESPOSTA DE SUCESSO ───────────────────────
     res.status(200).json({
       success: true,
       message: 'Formulário enviado com sucesso!',
@@ -149,10 +146,8 @@ app.post('/api/forms/submit', async (req, res) => {
     });
 
   } catch (error) {
-    // ─── TRATAMENTO DE ERROS ───────────────────────
     console.error('Erro ao processar formulário:', error.message);
 
-    // Se o erro é do Make webhook
     if (error.response?.status) {
       return res.status(502).json({
         success: false,
@@ -161,7 +156,6 @@ app.post('/api/forms/submit', async (req, res) => {
       });
     }
 
-    // Erro genérico
     res.status(500).json({
       success: false,
       message: 'Erro interno. Tente novamente.',
@@ -184,8 +178,6 @@ app.listen(PORT, () => {
   `);
 });
 
-// Tratamento de erro não capturado
 process.on('unhandledRejection', (err) => {
   console.error('Erro não capturado:', err);
 });
-
